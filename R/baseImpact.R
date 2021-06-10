@@ -16,7 +16,7 @@
 baseImpact <- function(paths, weights = NULL, divide_by_number = FALSE){
   data = list()
   for(i in 1:length(paths)){
-    data[[i]] = calculate_base_variables_importance(importance_frame = readxl::read_excel(paths[i]), weights = weights[i], divide_by_number = divide_by_number)
+    data[[i]] = calculate_base_variables_importance(importance_frame = readxl::read_excel(paths[i]), weights = weights, divide_by_number = divide_by_number)
   }
   data <- do.call(rbind.data.frame, data)
 

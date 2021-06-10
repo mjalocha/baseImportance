@@ -32,7 +32,7 @@ calculate_base_variables_importance <- function(importance_frame, divide_by_numb
   res = list()
   for(model in models){
     temp_frame <- decreasing_frequency_importance(frame = joined_frames[joined_frames$model_id == model,], divide_by_number = divide_by_number, base_columns = base_columns)
-    temp_frame <- calculate_impact(base_variables_importance = temp_frame, metric_cols = metric_cols, weights = NULL)
+    temp_frame <- calculate_impact(base_variables_importance = temp_frame, metric_cols = metric_cols, weights = weights)
     temp_frame$model_id = model
     res[[paste(model)]] = temp_frame %>% select(variable, impact, model_id)
   }
