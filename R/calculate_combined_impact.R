@@ -28,7 +28,7 @@ calculate_combined_model <- function(importance_frame, model_ids, ensamble_model
 
   #Calculate base variables impact for combined model
   for(variable in variables){
-    temp_impact = importance_frame[importance_frame$variable == variable,] %>% select(impact, model_id) %>% left_join(weights_frame)
+    temp_impact = importance_frame[importance_frame$variable == variable,] %>% select(impact, model_id) %>% left_join(weights_frame, "model_id")
     res = rbind(res, data.frame("variable" = variable, "impact" = sum(temp_impact$impact * temp_impact$weights), "model_id" = ensamble_model_id))
   }
 
