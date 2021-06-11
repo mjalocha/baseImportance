@@ -5,7 +5,7 @@
 #' @param ensamble_model_ids - combined model id
 #' @param weights_metrics - weights for importance of variables in each model (default: NULL, equal)
 #' @param weights_models - weights for importance of models impact (default: NULL, equal)
-#' @param divide_by_number - boolean, do you want to divide impact by number of base variables
+#' @param divide_by_number - boolean, specify weather do you want to divide impact by number of base variables
 #'
 #' @return dataframe with columns: variable (base variable), impact (calculated based on several models specified in mdoel_ids), model_id
 #'
