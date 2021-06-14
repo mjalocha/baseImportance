@@ -8,11 +8,6 @@
 
 calculate_impact <- function(base_variables_importance, metric_cols, weights = NULL){
 
-  #Verify whether the user has entered the weights
-  if(is.null(weights)){
-    weights = rep(1,length(metric_cols))/length(metric_cols)
-  }
-
   #Calculate impact based on weights
   temp_frame = spread(base_variables_importance,key = metric,value = decreasing)
 

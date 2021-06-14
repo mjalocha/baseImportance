@@ -2,25 +2,16 @@
 #'
 #' @param frame - dataframe with columns: model variable name, base variable name, model id, class, and the rest of the columns concern the impact of the variables
 #' @param base_columns - names for first four columns (default: c("model_variable", "base_variable", "model_id", "class"))
-#' @param divide_by_number - boolean, do you want to divide impact by number of base variables
 #'
 #' @return dataframe with columns: variable (base variable), metric, decreasing (calculated impact)
 #' @export
 
 
-decreasing_frequency_importance <- function(frame, base_columns, divide_by_number){
-
-  #Calculate importance divided by number of basic variables
-  if(divide_by_number){
-    frame_importance = frame %>%
-      mutate_at(c(base_columns[-1]), list(~./number_of_variables))
-  } else{
-    frame_importance = frame
-  }
+decreasing_frequency_importance <- function(frame, base_columns){
 
   #Assign column names and base variables
-  all_cols = colnames(frame_importance)
-  base_variables = frame_importance %>%
+  all_cols = colnames(frame)
+  base_variables = frame %>%
     select(base_variable) %>%
     unique()
 
@@ -28,7 +19,7 @@ decreasing_frequency_importance <- function(frame, base_columns, divide_by_numbe
 
   #For each base variable calculate decreasing importance
   for(var in base_variables %>% unlist()){
-    base_variable_frame = frame_importance[frame_importance[[all_cols[2]]] ==var,]
+    base_variable_frame = frame[frame[[all_cols[2]]] ==var,]
     for(metric in all_cols[(length(base_columns) + 1):(length(all_cols) - 1)]){
 
       #Find indexes of max values and verify wether there are one or more

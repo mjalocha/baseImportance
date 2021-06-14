@@ -14,3 +14,9 @@ test_that("Base Impact with weigths", {
   expect_equal(baseImpact(df3,weights = c(0.8, 0.2))$impact %>% round(7),
                c(0.9843972, 0.5518822, 0.2000000, 0.0523077, 0.9148987, 0.9050847, 0.8299301, 0.0000000))
 })
+
+test_that("Base impact wrong weigths", {
+  df3 = "./data/df3.xlsx"
+  expect_equal(baseImpact(df3,weights = c(0.8, 0.3)) %>% unlist() %>% as.character(),"Weights have to sum up to 1")
+  expect_equal(baseImpact(df3,weights = c(0.2, 0.3, 0.5)) %>% unlist() %>% as.character(),paste0("Wrong number of weights is specified: ", paste0(c(0.2, 0.3, 0.5), collapse = ", ")))
+})

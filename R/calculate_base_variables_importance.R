@@ -10,14 +10,27 @@
 #' @import tidyr
 
 
-calculate_base_variables_importance <- function(importance_frame, divide_by_number, weights = NULL, base_columns = c("model_variable", "base_variable", "model_id", "class"))
+calculate_base_variables_importance <- function(importance_frame, weights = NULL, base_columns = c("model_variable", "base_variable", "model_id", "class"))
 {
 
   #Set colnames
   colnames(importance_frame)[1:length(base_columns)] <- base_columns
+  metric_cols = colnames(importance_frame)[colnames(importance_frame) %!in% base_columns]
+
+  #Verify whether the user has entered the weights
+  if(is.null(weights)){
+    weights = rep(1,length(metric_cols))/length(metric_cols)
+  }
+
+  #Verify weather weights sum up to 1
+  if(sum(weights) != 1)
+    return(0)
+
+  #Verify weather correct number of weights is specified
+  if(length(metric_cols) != length(weights))
+    return(1)
 
   #Change metrics type to numeric
-  metric_cols = colnames(importance_frame)[colnames(importance_frame) %!in% base_columns]
   importance_frame[,metric_cols] <- sapply(importance_frame[,metric_cols],as.numeric)
 
   #Join frames
@@ -29,9 +42,10 @@ calculate_base_variables_importance <- function(importance_frame, divide_by_numb
   #Calculate impact for all model id's
   models = importance_frame$model_id %>% unique()
 
+
   res = list()
   for(model in models){
-    temp_frame <- decreasing_frequency_importance(frame = joined_frames[joined_frames$model_id == model,], divide_by_number = divide_by_number, base_columns = base_columns)
+    temp_frame <- decreasing_frequency_importance(frame = joined_frames[joined_frames$model_id == model,], base_columns = base_columns)
     temp_frame <- calculate_impact(base_variables_importance = temp_frame, metric_cols = metric_cols, weights = weights)
     temp_frame$model_id = model
     res[[paste(model)]] = temp_frame %>% select(variable, impact, model_id)
