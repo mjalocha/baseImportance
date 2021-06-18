@@ -12,7 +12,6 @@
 #' @import dplyr
 #'
 #' @export
-#'
 
 
 baseImpact_combined <- function(paths, model_ids, ensamble_model_id, weights_metrics = NULL, weights_models = NULL){

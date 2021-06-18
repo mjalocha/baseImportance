@@ -8,18 +8,18 @@ baseImpact_combined(
   paths,
   model_ids,
   ensamble_model_id,
-  weights = NULL,
-  divide_by_number = FALSE
+  weights_metrics = NULL,
+  weights_models = NULL
 )
 }
 \arguments{
 \item{paths}{- paths to files with data}
 
-\item{model_ids}{- id of component models}
+\item{model_ids}{- id of component models (vector of numeric values)}
 
-\item{weights}{- weights for importance of variables in each model (default: NULL, equal)}
+\item{weights_metrics}{- weights for importance of variables in each model (default: NULL, equal)}
 
-\item{divide_by_number}{- boolean, do you want to divide impact by number of base variables}
+\item{weights_models}{- weights for importance of models impact (default: NULL, equal)}
 
 \item{ensamble_model_ids}{- combined model id}
 }

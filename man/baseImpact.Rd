@@ -4,14 +4,12 @@
 \alias{baseImpact}
 \title{Calculate base variables impact (function for users)}
 \usage{
-baseImpact(paths, weights = NULL, divide_by_number = FALSE)
+baseImpact(paths, weights = NULL)
 }
 \arguments{
 \item{paths}{- paths to files with data}
 
 \item{weights}{- weights for importance of variables in each model (default: NULL, equal)}
-
-\item{divide_by_number}{- boolean, do you want to divide impact by number of base variables}
 }
 \value{
 dataframe with columns: variable (base variable), impact (calculated based on several models specified in mdoel_ids), model_id

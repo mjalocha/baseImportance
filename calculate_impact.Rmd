@@ -1,0 +1,81 @@
+---
+title: "Calculate Impact"
+author: "Mateusz Jałocha"
+date: "16.06.2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Database connection
+
+```{r}
+library(tidyverse)
+
+options(java.parameters = "-Xmx8048m")
+library(RJDBC)
+
+data_base2  = "jdbc:db2://ibm-db0:50001/CAMP"
+user2 = 'CM_DAACC'
+jcc = JDBC("com.ibm.db2.jcc.DB2Driver",
+           "C:/JDBC/db2jcc.jar")
+start <- Sys.time()
+con2 <- dbConnect(jcc,
+                  data_base2,
+                  user2,
+                  password= "Lato123!")
+```
+
+```{r warning=FALSE,message=FALSE}
+if (!require(devtools)) {
+    install.packages('devtools')
+}    
+
+devtools::install_github('mjalocha/baseImportance')
+
+```
+
+## Foresight
+
+```{r}
+model_101 <- "Z:/Kamil/Ranking zmiennych/model_101_ranking.xlsx"
+model_111 <- "Z:/Kamil/Ranking zmiennych/model_111_ranking.xlsx"
+model_rest <- "Z:/Kamil/Ranking zmiennych/model_1xx_ranking.xlsx"
+
+#Calculate basic models impact
+base_models_foresight = baseImpact(c(model_101,model_111, model_rest))
+
+#Calculate combined models impact
+foresight_104 = baseImpact_combined(c(model_101, model_rest), c(101,103), 104)
+foresight_105 = baseImpact_combined(c(model_101, model_rest), c(101,103), 105)
+foresight_114 = baseImpact_combined(c(model_111, model_rest), c(111,112), 114)
+foresight_115 = baseImpact_combined(c(model_111, model_rest), c(111,113), 115)
+
+#Bind impact and push to database
+impact_foresight = rbind(base_models_foresight, combined_104, combined_105, combined_114, combined_115)
+push_impact_class(con2, impact_foresight)
+
+```
+
+#PNP
+
+```{r}
+model_20x1 <- "Z:/Kamil/Ranking zmiennych/model_20x1_ranking.xlsx"
+model_20x2 <- "Z:/Kamil/Ranking zmiennych/model_20x2_ranking.xlsx"
+
+#Calculate basic models impact
+base_models_pnp = baseImpact(c(model_20x1,model_20x2))
+
+#Calculate combined models impact
+pnp_2013 = baseImpact_combined(c(model_20x1, model_20x2), c(2011,2012), 2013)
+pnp_2023 = baseImpact_combined(c(model_20x1, model_20x2), c(2021,2022), 2023)
+pnp_2033 = baseImpact_combined(c(model_20x1, model_20x2), c(2031,2032), 2033)
+pnp_2043 = baseImpact_combined(c(model_20x1, model_20x2), c(2041,2042), 2043)
+
+#Bind impact and push to database
+impact_pnp = rbind(base_models_pnp, pnp_2013, pnp_2023, pnp_2033, pnp_2043)
+push_impact_class(con2, impact_pnp)
+```
+
